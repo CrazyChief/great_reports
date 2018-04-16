@@ -1,0 +1,25 @@
+# idea
+.idea
+
+# environment
+.venv
+
+__pycache__/
+
+# Django stuff:
+*.log
+.static_storage/
+.media/
+local_settings.py
+*.sqlite3
+
+# node modules
+node_modules/
+
+# do not include webpack stats
+webpack-stats.dev.json
+webpack-stats.prod.json
+
+# build files
+build/
+bundles/
