@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 
-import {reports} from '../actions';
+import {reports, auth} from '../actions';
 
 
 class GreatReports extends Component {
@@ -38,6 +38,9 @@ class GreatReports extends Component {
 			<div>
 				<h2>Welcome to Great Reports!</h2>
 				<hr/>
+				<div style={{textAlign: "right"}}>
+          {this.props.user.username} (<a onClick={this.props.logout}>logout</a>)
+        </div>
 
 				<h3>Add new report</h3>
 				<form onSubmit={this.submitReport}>
@@ -70,6 +73,7 @@ class GreatReports extends Component {
 const mapStateToProps = state => {
 	return {
 		reports: state.reports,
+		user: state.auth.user,
 	}
 }
 
@@ -87,7 +91,8 @@ const mapDispatchToProps = dispatch => {
 		},
 		deleteReport: (id) => {
 			dispatch(reports.deleteReport(id));
-		}
+		},
+		logout: () => dispatch(auth.logout()),
 	}
 }
 

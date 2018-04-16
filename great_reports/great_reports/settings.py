@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'webpack_loader',
     'rest_framework',
+    'knox',
 
     'api.apps.ApiConfig',
     'reports.apps.ReportsConfig',
@@ -122,6 +123,11 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# Rest framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+}
 
 
 # Static files (CSS, JavaScript, Images)
