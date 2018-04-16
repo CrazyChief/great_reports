@@ -3,7 +3,6 @@ from rest_framework.response import Response
 
 from knox.models import AuthToken
 
-from reports.models import Report
 from .serializers import (ReportSerializer, CreateUserSerializer,
                           UserSerializer, LoginUserSerializer)
 

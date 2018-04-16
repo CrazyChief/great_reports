@@ -28,7 +28,7 @@ class GreatReports extends Component {
 		if (this.state.updateReportId === null) {
 			this.props.addReport(this.state.text).then(this.resetForm);
 		} else {
-			this.state.updateReport(this.state.updateReportId, this.state.text).then(this.resetForm);
+			this.props.updateReport(this.state.updateReportId, this.state.text).then(this.resetForm);
 		}
 		this.resetForm();
 	}
@@ -56,14 +56,14 @@ class GreatReports extends Component {
 				<h3>Reports</h3>
 				<table>
 					<tbody>
-						{this.props.reports.map((report, id) => (
-							<tr key={`report_${id}`}>
-								<td>{report.text}</td>
-								<td><button onClick={() => this.selectForEdit(id)}>Edit</button></td>
-								<td><button onClick={() => this.props.deleteReport(id)}>Delete</button></td>
-							</tr>
-						))}
-					</tbody>
+            {this.props.reports.map((report, id) => (
+              <tr key={`report_${report.id}`}>
+                <td>{report.text}</td>
+                <td><button onClick={() => this.selectForEdit(id)}>edit</button></td>
+                <td><button onClick={() => this.props.deleteReport(id)}>delete</button></td>
+              </tr>
+            ))}
+          </tbody>
 				</table>
 			</div>
 		)
