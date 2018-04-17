@@ -14,6 +14,8 @@ export default function reports(state=initialState, action) {
 		case 'UPDATE_REPORT':
 			let reportToUpdate = reportList[action.index];
 			reportToUpdate.text = action.report.text;
+			reportToUpdate.description = action.report.description;
+			reportToUpdate.spent_time = action.report.spent_time;
 			reportList.splice(action.index, 1, reportToUpdate);
 			return reportList;
 

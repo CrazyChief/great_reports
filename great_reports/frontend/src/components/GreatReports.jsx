@@ -7,6 +7,8 @@ import {reports, auth} from '../actions';
 class GreatReports extends Component {
 	state = {
 		text: "",
+		description: "",
+		spent_time: "",
 		updateReportId: null
 	}
 
@@ -15,20 +17,32 @@ class GreatReports extends Component {
 	}
 
 	resetForm = () => {
-		this.setState({text: "", updateReportId: null});
+		this.setState({
+			text: "", description: "", spent_time: "", updateReportId: null});
 	}
 
 	selectForEdit = (id) => {
 		let report = this.props.reports[id];
-		this.setState({text: report.text, updateReportId: id});
+		this.setState({
+			text: report.text,
+			description: report.description,
+			spent_time: report.spent_time,
+			updateReportId: id});
 	}
 
 	submitReport = (e) => {
 		e.preventDefault();
 		if (this.state.updateReportId === null) {
-			this.props.addReport(this.state.text).then(this.resetForm);
+			this.props.addReport(
+				this.state.text,
+				this.state.description,
+				this.state.spent_time).then(this.resetForm);
 		} else {
-			this.props.updateReport(this.state.updateReportId, this.state.text).then(this.resetForm);
+			this.props.updateReport(
+				this.state.updateReportId,
+				this.state.text,
+				this.state.description,
+				this.state.spent_time).then(this.resetForm);
 		}
 		this.resetForm();
 	}
@@ -59,6 +73,8 @@ class GreatReports extends Component {
             {this.props.reports.map((report, id) => (
               <tr key={`report_${report.id}`}>
                 <td>{report.text}</td>
+	              <td>{report.description}</td>
+	              <td>{report.spent_time}</td>
                 <td><button onClick={() => this.selectForEdit(id)}>edit</button></td>
                 <td><button onClick={() => this.props.deleteReport(id)}>delete</button></td>
               </tr>
@@ -83,11 +99,11 @@ const mapDispatchToProps = dispatch => {
 		fetchReports: () => {
 			dispatch(reports.fetchReports());
 		},
-		addReport: (text) => {
-			return dispatch(reports.addReport(text));
+		addReport: (text, description, spent_time) => {
+			return dispatch(reports.addReport(text, description, spent_time));
 		},
-		updateReport: (id, text) => {
-			return dispatch(reports.updateReport(id, text));
+		updateReport: (id, text, description, spent_time) => {
+			return dispatch(reports.updateReport(id, text, description, spent_time));
 		},
 		deleteReport: (id) => {
 			dispatch(reports.deleteReport(id));
