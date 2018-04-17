@@ -25,8 +25,8 @@ class GreatReports extends Component {
 		let report = this.props.reports[id];
 		this.setState({
 			text: report.text,
-			description: report.description,
-			spent_time: report.spent_time,
+			description: report.description || "",
+			spent_time: report.spent_time || "",
 			updateReportId: id});
 	}
 

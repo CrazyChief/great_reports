@@ -1,3 +1,6 @@
+import _ from "lodash";
+
+
 export const fetchReports = () => {
   return (dispatch, getState) => {
     let headers = {"Content-Type": "application/json"};
@@ -38,6 +41,14 @@ export const addReport = (text, description, spent_time) => {
       headers["Authorization"] = `Token ${token}`;
     }
 
+    /* Checking empty values */
+    if (_.isEmpty(description)) {
+      description = null;
+    }
+    if (_.isEmpty(spent_time)) {
+      spent_time = null
+    }
+
     let body = JSON.stringify({text, description, spent_time, });
     return fetch("/api/reports/", {headers, method: "POST", body})
       .then(res => {
@@ -69,6 +80,14 @@ export const updateReport = (index, text, description, spent_time) => {
 
     if (token) {
       headers["Authorization"] = `Token ${token}`;
+    }
+
+    /* Checking empty values */
+    if (_.isEmpty(description)) {
+      description = null;
+    }
+    if (_.isEmpty(spent_time)) {
+      spent_time = null
     }
 
     let body = JSON.stringify({text, description, spent_time, });
