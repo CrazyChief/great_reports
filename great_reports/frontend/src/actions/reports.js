@@ -29,7 +29,7 @@ export const fetchReports = () => {
   }
 }
 
-export const addReport = text => {
+export const addReport = (text, description, spent_time) => {
   return (dispatch, getState) => {
     let headers = {"Content-Type": "application/json"};
     let {token} = getState().auth;
@@ -38,7 +38,7 @@ export const addReport = text => {
       headers["Authorization"] = `Token ${token}`;
     }
 
-    let body = JSON.stringify({text, });
+    let body = JSON.stringify({text, description, spent_time, });
     return fetch("/api/reports/", {headers, method: "POST", body})
       .then(res => {
         if (res.status < 500) {
@@ -61,7 +61,7 @@ export const addReport = text => {
   }
 }
 
-export const updateReport = (index, text) => {
+export const updateReport = (index, text, description, spent_time) => {
   return (dispatch, getState) => {
 
     let headers = {"Content-Type": "application/json"};
@@ -71,7 +71,7 @@ export const updateReport = (index, text) => {
       headers["Authorization"] = `Token ${token}`;
     }
 
-    let body = JSON.stringify({text, });
+    let body = JSON.stringify({text, description, spent_time, });
     let reportId = getState().reports[index].id;
 
     return fetch(`/api/reports/${reportId}/`, {headers, method: "PUT", body})

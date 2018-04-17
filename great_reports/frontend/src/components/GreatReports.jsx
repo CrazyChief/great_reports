@@ -59,10 +59,19 @@ class GreatReports extends Component {
 				<h3>Add new report</h3>
 				<form onSubmit={this.submitReport}>
 					<input
-					value={this.state.text}
-					placeholder="Enter report here..."
-					onChange={(e) => this.setState({text: e.target.value})}
-					required/>
+						value={this.state.text}
+						placeholder="Enter report title here..."
+						onChange={(e) => this.setState({text: e.target.value})}
+						required/>
+					<textarea
+						value={this.state.description}
+						placeholder="Enter report description here..."
+						onChange={(e) => this.setState({description: e.target.value})}></textarea>
+					<input
+						value={this.state.spent_time}
+						onChange={(e) => this.setState({spent_time: e.target.value})}
+						type="time"
+					/>
 					<button onClick={this.resetForm}>Reset</button>
 					<input type="submit" value="Save Report" />
 				</form>
