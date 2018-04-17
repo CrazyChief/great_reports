@@ -8,7 +8,8 @@ class Report(models.Model):
     owner = models.ForeignKey(
         User, related_name='reports', on_delete=models.CASCADE, null=True,
         verbose_name=_('User'))
-    description = models.TextField(verbose_name=_('Description'), null=True)
+    description = models.TextField(
+        verbose_name=_('Description'), null=True, blank=True)
     spent_time = models.TimeField(
         verbose_name=_('Spent time'), null=True, blank=True)
     created = models.DateTimeField(
