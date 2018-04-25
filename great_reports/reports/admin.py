@@ -14,4 +14,4 @@ class PlanAdmin(admin.ModelAdmin):
 
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('text', 'owner', 'created')

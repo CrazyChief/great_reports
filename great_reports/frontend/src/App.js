@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Route, Switch, BrowserRouter, Redirect} from 'react-router-dom';
 
 import { Provider, connect } from 'react-redux';
@@ -69,7 +70,9 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <RootContainer />
+        <MuiThemeProvider>
+          <RootContainer />
+        </MuiThemeProvider>
       </Provider>
     )
   }

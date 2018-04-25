@@ -59,6 +59,7 @@ class Report(models.Model):
     updated = models.DateTimeField(verbose_name=_('Updated'), auto_now=True)
 
     class Meta:
+        ordering = ['-created']
         verbose_name = _('Report')
         verbose_name_plural = _('Reports')
 
