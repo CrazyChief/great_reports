@@ -86,7 +86,7 @@ class GreatReports extends Component {
 				this.state.description,
 				this.convertDateToString(this.state.spent_time)).then(this.resetForm);
 		}
-		this.resetForm();
+		this.handleClose();
 	}
 
 	handleTimePicker = (event, date) => {
