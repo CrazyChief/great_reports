@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import {
+	Tabs,
+	Tab,
 	FloatingActionButton,
 	FlatButton,
 	Dialog,
@@ -95,7 +97,7 @@ class GreatReports extends Component {
 
 	render() {
 		const actions = [
-      <FlatButton
+      <RaisedButton
         label="Cancel"
         primary={true}
         onClick={this.handleClose}
@@ -119,12 +121,6 @@ class GreatReports extends Component {
           {this.props.user.username} (<a onClick={this.props.logout}>logout</a>)
         </div>
 
-				<h3>
-					Add new report
-					<FloatingActionButton mini={true} style={style} onClick={this.handleOpen}>
-			      <ContentAdd />
-			    </FloatingActionButton>
-				</h3>
 				<Dialog
 					title="Add new report"
 					actions={actions}
@@ -158,42 +154,61 @@ class GreatReports extends Component {
 					</form>
 				</Dialog>
 
-				<h3>Reports</h3>
-				<Table>
-					<TableHeader>
-						<TableRow>
-							<TableHeaderColumn>Title</TableHeaderColumn>
-							<TableHeaderColumn>Description</TableHeaderColumn>
-							<TableHeaderColumn>Estimate</TableHeaderColumn>
-							<TableHeaderColumn>Spent time</TableHeaderColumn>
-							<TableHeaderColumn>Actions</TableHeaderColumn>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{this.props.reports.map((report, id) => (
-							<TableRow key={`report_${report.id}`}>
-								<TableRowColumn>{report.text}</TableRowColumn>
-								<TableRowColumn>{report.description}</TableRowColumn>
-								<TableRowColumn>{report.extimate}</TableRowColumn>
-								<TableRowColumn>{report.spent_time}</TableRowColumn>
-								<TableRowColumn>
-									<RaisedButton
-										label="Edit"
-										backgroundColor="#0000FF"
-										onClick={() => this.selectForEdit(id)}
-										style={style}
-									/>
-									<RaisedButton
-										label="Delete"
-										backgroundColor="#FF0000"
-										onClick={() => this.props.deleteReport(id)}
-										style={style}
-									/>
-								</TableRowColumn>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
+				<Tabs>
+					<Tab label="Plans">
+						<h3>Plans</h3>
+					</Tab>
+					<Tab label="Reports">
+						<div style={{display: "flex", justifyContent: "space-between",}}>
+							<div>
+								<h3>Reports</h3>
+							</div>
+							<div>
+								<h3 style={{marginTop: "auto", marginBottom: "auto",}}>
+									<span style={{verticalAlign: "36%",}}>Add new report</span>
+									<FloatingActionButton mini={true} style={style} onClick={this.handleOpen}>
+							      <ContentAdd />
+							    </FloatingActionButton>
+								</h3>
+							</div>
+						</div>
+						<Table>
+							<TableHeader>
+								<TableRow>
+									<TableHeaderColumn>Title</TableHeaderColumn>
+									<TableHeaderColumn>Description</TableHeaderColumn>
+									<TableHeaderColumn>Estimate</TableHeaderColumn>
+									<TableHeaderColumn>Spent time</TableHeaderColumn>
+									<TableHeaderColumn>Actions</TableHeaderColumn>
+								</TableRow>
+							</TableHeader>
+							<TableBody>
+								{this.props.reports.map((report, id) => (
+									<TableRow key={`report_${report.id}`}>
+										<TableRowColumn>{report.text}</TableRowColumn>
+										<TableRowColumn>{report.description}</TableRowColumn>
+										<TableRowColumn>{report.extimate}</TableRowColumn>
+										<TableRowColumn>{report.spent_time}</TableRowColumn>
+										<TableRowColumn>
+											<RaisedButton
+												label="Edit"
+												backgroundColor="#0000FF"
+												onClick={() => this.selectForEdit(id)}
+												style={style}
+											/>
+											<RaisedButton
+												label="Delete"
+												backgroundColor="#FF0000"
+												onClick={() => this.props.deleteReport(id)}
+												style={style}
+											/>
+										</TableRowColumn>
+									</TableRow>
+								))}
+							</TableBody>
+						</Table>
+					</Tab>
+				</Tabs>
 			</div>
 		)
 	}
