@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from reports.models import Report
+from reports.models import Report, Plan, Note
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 
@@ -8,6 +8,12 @@ class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
         fields = ('id', 'text', 'description', 'estimate', 'spent_time')
+
+
+class PlanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Plan
+        fields = ('id', 'owner', 'date_for', 'created')
 
 
 class CreateUserSerializer(serializers.ModelSerializer):

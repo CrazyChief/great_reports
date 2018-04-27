@@ -9,6 +9,7 @@ class NoteInline(admin.TabularInline):
 
 @admin.register(Plan)
 class PlanAdmin(admin.ModelAdmin):
+    list_display = ('owner', 'date_for')
     inlines = [NoteInline]
 
 

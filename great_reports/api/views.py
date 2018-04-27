@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from knox.models import AuthToken
 
 from .serializers import (ReportSerializer, CreateUserSerializer,
-                          UserSerializer, LoginUserSerializer)
+                          UserSerializer, LoginUserSerializer, PlanSerializer)
 
 
 class ReportViewSet(viewsets.ModelViewSet):
@@ -13,6 +13,17 @@ class ReportViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.request.user.reports.all()
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+class PlanViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated, ]
+    serializer_class = PlanSerializer
+
+    def get_queryset(self):
+        return self.request.user.plan_set.all()
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
