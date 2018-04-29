@@ -26,6 +26,7 @@ class Reports extends Component {
 	state = {
 		text: "",
 		description: "",
+		estimate: null,
 		spent_time: null,
 		updateReportId: null,
 		open: false,
@@ -174,7 +175,7 @@ class Reports extends Component {
 							<TableRow key={`report_${report.id}`}>
 								<TableRowColumn>{report.text}</TableRowColumn>
 								<TableRowColumn>{report.description}</TableRowColumn>
-								<TableRowColumn>{report.extimate}</TableRowColumn>
+								<TableRowColumn>{report.estimate}</TableRowColumn>
 								<TableRowColumn>{report.spent_time}</TableRowColumn>
 								<TableRowColumn>
 									<RaisedButton

@@ -57,13 +57,13 @@ class Plans extends Component {
 
 	resetPlanForm = () => {
 		this.setState({
-			date_for: null,
+			date_for: null, updatePlanId: null,
 		})
 	};
 
 	submitPlan = (e) => {
 		e.preventDefault();
-		if (this.state.updatePlanId === null) {
+		if ((this.state.updatePlanId === null) || (this.state.updatePlanId === undefined)) {
 			this.props.addPlan(this.convertDateToString(this.state.date_for));
 		} else {
 			this.props.updatePlan(
@@ -98,6 +98,11 @@ class Plans extends Component {
         primary={true}
         onClick={this.handleClose}
       />,
+			<RaisedButton
+				label="Reset"
+				onClick={this.resetPlanForm}
+				style={style}
+			/>,
 			<RaisedButton
 	      label="Save Report"
 	      onClick={this.submitPlan}
