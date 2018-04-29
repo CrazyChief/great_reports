@@ -11,6 +11,7 @@ class Plan(models.Model):
         auto_now_add=True, verbose_name=_('Created at'))
 
     class Meta:
+        ordering = ['-date_for']
         verbose_name = _('Plan')
         verbose_name_plural = _('Plans')
 
