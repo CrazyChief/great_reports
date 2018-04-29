@@ -5,9 +5,16 @@ import {
 	FloatingActionButton,
 	Dialog,
 	RaisedButton,
+	DatePicker,
+	IconButton,
+	IconMenu,
+	MenuItem
 } from 'material-ui';
+import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import {connect} from 'react-redux';
+import { format } from 'date-fns';
 
 import {plans, auth} from '../actions';
 
@@ -27,11 +34,62 @@ class Plans extends Component {
 		this.props.fetchPlans();
 	}
 
+	handleOpen = () => {
+		this.setState({open: true});
+	};
+
+	handleClose = () => {
+		this.resetPlanForm();
+		this.setState({open: false});
+	};
+
+	handleChange = (event, date) => {
+    this.setState({
+      date_for: date,
+    });
+  };
+
 	handleNestedListToggle = (item) => {
     this.setState({
       open: item.state.open,
     });
   };
+
+	resetPlanForm = () => {
+		this.setState({
+			date_for: null,
+		})
+	};
+
+	submitPlan = (e) => {
+		e.preventDefault();
+		if (this.state.updatePlanId === null) {
+			this.props.addPlan(this.convertDateToString(this.state.date_for));
+		} else {
+			this.props.updatePlan(
+				this.state.updatePlanId,
+				this.convertDateToString(this.state.date_for));
+		}
+		this.handleClose();
+	};
+
+	selectForEdit = (id) => {
+		let plan = this.props.plans[id];
+		this.setState({
+			date_for: this.convertStringToDate(plan.date_for),
+			updatePlanId: id,
+		});
+		this.handleOpen();
+	};
+
+	convertDateToString = (date) => {
+		return format(date, "YYYY-MM-DD");
+	};
+
+	convertStringToDate = (string) => {
+		let d = new Date(string);
+		return d;
+	};
 
 	render() {
 		const planActions = [
@@ -40,7 +98,21 @@ class Plans extends Component {
         primary={true}
         onClick={this.handleClose}
       />,
+			<RaisedButton
+	      label="Save Report"
+	      onClick={this.submitPlan}
+	      style={style} />,
 		];
+
+		const iconButtonElement = (
+		  <IconButton
+		    touch={true}
+		    tooltip="more"
+		    tooltipPosition="bottom-left"
+		  >
+		    <MoreVertIcon color={grey400} />
+		  </IconButton>
+		);
 
 		return (
 			<div>
@@ -50,7 +122,14 @@ class Plans extends Component {
 					modal={true}
 					open={this.state.open}
 				>
-
+					<form onSubmit={this.submitPlan}>
+						<DatePicker
+							hintText="Pick Date For"
+							mode="landscape"
+							value={this.state.date_for}
+							onChange={this.handleChange}
+						/>
+					</form>
 				</Dialog>
 
 				<div style={{display: "flex", justifyContent: "space-between",}}>
@@ -73,6 +152,13 @@ class Plans extends Component {
 							primaryText={`Plan for ${plan.date_for}`}
 							initiallyOpen={false}
               primaryTogglesNestedList={true}
+							rightIconButton={
+								<IconMenu iconButtonElement={iconButtonElement}>
+							    <MenuItem onClick={() => this.selectForEdit(id)}>Edit</MenuItem>
+							    <MenuItem onClick={() => this.props.deletePlan(id)}>Delete</MenuItem>
+							  </IconMenu>
+							}
+							nestedItems={[]}
 						/>
 					))}
 				</List>

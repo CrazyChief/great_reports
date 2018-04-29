@@ -2,13 +2,7 @@ import React, { Component } from 'react';
 import {
 	Tabs,
 	Tab,
-	List,
-	ListItem,
-	FloatingActionButton,
-	Dialog,
-	RaisedButton,
 } from 'material-ui';
-import ContentAdd from 'material-ui/svg-icons/content/add';
 import {connect} from 'react-redux';
 
 import {plans, auth} from '../actions';
@@ -41,7 +35,6 @@ class GreatReports extends Component {
 
 const mapStateToProps = state => {
 	return {
-		plans: state.plans,
 		user: state.auth.user,
 	}
 };

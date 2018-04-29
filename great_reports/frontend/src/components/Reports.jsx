@@ -77,13 +77,13 @@ class Reports extends Component {
 			this.props.addReport(
 				this.state.text,
 				this.state.description,
-				this.convertDateToString(this.state.spent_time)).then(this.resetReportForm);
+				this.convertDateToString(this.state.spent_time));
 		} else {
 			this.props.updateReport(
 				this.state.updateReportId,
 				this.state.text,
 				this.state.description,
-				this.convertDateToString(this.state.spent_time)).then(this.resetReportForm);
+				this.convertDateToString(this.state.spent_time));
 		}
 		this.handleClose();
 	};
