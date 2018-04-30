@@ -5,7 +5,7 @@ import {
 } from 'material-ui';
 import {connect} from 'react-redux';
 
-import {plans, auth} from '../actions';
+import {auth} from '../actions';
 import Plans from './Plans';
 import Reports from './Reports';
 
@@ -42,18 +42,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		fetchPlans: () => {
-			dispatch(plans.fetchPlans());
-		},
-		addPlan: (date_for) => {
-			return dispatch(plans.addPlan(date_for));
-		},
-		updatePlan: (id, date_for) => {
-			return dispatch(plans.updatePlan(id, date_for));
-		},
-		deletePlan: (id) => {
-			dispatch(plans.deletePlan(id));
-		},
 		logout: () => dispatch(auth.logout()),
 	}
 };
