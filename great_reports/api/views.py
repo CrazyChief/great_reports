@@ -3,8 +3,11 @@ from rest_framework.response import Response
 
 from knox.models import AuthToken
 
+from reports.models import Plan
+
 from .serializers import (ReportSerializer, CreateUserSerializer,
-                          UserSerializer, LoginUserSerializer, PlanSerializer)
+                          UserSerializer, LoginUserSerializer,
+                          PlanSerializer, NoteSerializer)
 
 
 class ReportViewSet(viewsets.ModelViewSet):
@@ -27,6 +30,20 @@ class PlanViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+
+class NoteViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated, ]
+    serializer_class = NoteSerializer
+
+    def get_queryset(self):
+        plan_id = int(self.request.GET.get('plan_id', None))
+        return self.request.user.note_set.filter(plan_id=plan_id).all()
+
+    def perform_create(self, serializer):
+        plan_id = int(self.request.GET.get('plan_id', None))
+        plan = Plan.objects.get(id=plan_id)
+        serializer.save(plan=plan, owner=self.request.user)
 
 
 class RegistrationAPI(generics.GenericAPIView):

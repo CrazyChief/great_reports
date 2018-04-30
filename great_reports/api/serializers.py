@@ -7,13 +7,21 @@ from django.contrib.auth.models import User
 class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
-        fields = ('id', 'text', 'description', 'estimate', 'spent_time')
+        fields = ('id', 'text', 'owner', 'description',
+                  'estimate', 'spent_time')
 
 
 class PlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plan
         fields = ('id', 'owner', 'date_for', 'created')
+
+
+class NoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Note
+        fields = ('id', 'plan', 'title', 'owner',
+                  'description', 'estimate', 'spent_time')
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
