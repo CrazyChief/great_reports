@@ -6,7 +6,9 @@ from django.utils.translation import ugettext_lazy as _
 class Plan(models.Model):
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, verbose_name=_('User'))
-    date_for = models.DateField(verbose_name=_('Date for'))
+    date_for = models.DateField(
+        verbose_name=_('Date for'),
+        unique_for_date='date_for')
     created = models.DateTimeField(
         auto_now_add=True, verbose_name=_('Created at'))
 
