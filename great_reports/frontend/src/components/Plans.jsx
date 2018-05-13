@@ -8,7 +8,9 @@ import {
 	DatePicker,
 	IconButton,
 	IconMenu,
-	MenuItem
+	MenuItem,
+	TextField,
+	TimePicker,
 } from 'material-ui';
 import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import ContentAdd from 'material-ui/svg-icons/content/add';
@@ -16,7 +18,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import {connect} from 'react-redux';
 import { format } from 'date-fns';
 
-import {plans, auth} from '../actions';
+import {plans, notes, auth} from '../actions';
 
 
 const style = {
@@ -26,16 +28,29 @@ const style = {
 
 class Plans extends Component {
 	state = {
+		planId: null,
+		title: "",
+		description: "",
+		estimate: null,
+		spent_time: null,
+		updateNoteId: null,
+		updatePlanId: null,
 		date_for: null,
 		open: false,
+		noteOpen: false,
 	};
 
 	componentDidMount() {
 		this.props.fetchPlans();
+		this.props.fetchNotes();
 	}
 
 	handleOpen = () => {
 		this.setState({open: true});
+	};
+
+	handleNoteOpen = () => {
+		this.setState({noteOpen: true});
 	};
 
 	handleClose = () => {
@@ -43,11 +58,34 @@ class Plans extends Component {
 		this.setState({open: false});
 	};
 
+	handleNoteClose = () => {
+		this.resetNoteForm();
+		this.setState({noteOpen: false});
+	};
+
 	handleChange = (event, date) => {
     this.setState({
       date_for: date,
     });
   };
+
+	getNotesForPlan = (planId) => {
+		let notesListForPlan = [];
+		const notesList = this.props.notes;
+		notesList.forEach((note, id) => {
+			if (note.plan === planId) {
+				notesListForPlan.push(
+				<ListItem
+					key={`note_${note.id}`}
+					primaryText={note.title}
+					secondaryText={note.description}
+					onClick={() => this.selectNoteForEdit(id)}
+				/>
+				)
+			}
+		});
+		return notesListForPlan;
+	};
 
 	handleNestedListToggle = (item) => {
     this.setState({
@@ -58,6 +96,12 @@ class Plans extends Component {
 	resetPlanForm = () => {
 		this.setState({
 			date_for: null, updatePlanId: null,
+		})
+	};
+
+	resetNoteForm = () => {
+		this.setState({
+			planId: null, title: "", description: "", spent_time: null, updateNoteId: null,
 		})
 	};
 
@@ -73,6 +117,25 @@ class Plans extends Component {
 		this.handleClose();
 	};
 
+	submitNote = (e) => {
+		e.preventDefault();
+		if ((this.state.updateNoteId === null) || (this.state.updateNoteId === undefined)) {
+			this.props.addNote(
+				this.state.planId,
+				this.state.title,
+				this.state.description,
+				this.convertNoteDateToString(this.state.spent_time));
+		} else {
+			this.props.updateNote(
+				this.state.updateNoteId,
+				this.state.planId,
+				this.state.title,
+				this.state.description,
+				this.convertNoteDateToString(this.state.spent_time));
+		}
+		this.handleNoteClose();
+	};
+
 	selectForEdit = (id) => {
 		let plan = this.props.plans[id];
 		this.setState({
@@ -82,6 +145,18 @@ class Plans extends Component {
 		this.handleOpen();
 	};
 
+	selectNoteForEdit = (id) => {
+		let note = this.props.notes[id];
+		this.setState({
+			planId: note.plan,
+			title: note.title,
+			description: note.description || "",
+			spent_time: this.convertNoteStringToDate(note.spent_time) || null,
+			updateNoteId: id,
+		});
+		this.handleNoteOpen();
+	};
+
 	convertDateToString = (date) => {
 		return format(date, "YYYY-MM-DD");
 	};
@@ -89,6 +164,22 @@ class Plans extends Component {
 	convertStringToDate = (string) => {
 		let d = new Date(string);
 		return d;
+	};
+
+	convertNoteDateToString = (date) => {
+		return `${date.getHours()}:${date.getMinutes()}`
+	};
+
+	convertNoteStringToDate = (string) => {
+		let d = new Date();
+		let pieces = string.split(':');
+		d.setHours(parseInt(pieces[0], 10));
+		d.setMinutes(parseInt(pieces[1], 10));
+		return d;
+	};
+
+	handleTimePicker = (event, date) => {
+		this.setState({spent_time: date})
 	};
 
 	render() {
@@ -104,8 +195,25 @@ class Plans extends Component {
 				style={style}
 			/>,
 			<RaisedButton
-	      label="Save Report"
+	      label="Save Plan"
 	      onClick={this.submitPlan}
+	      style={style} />,
+		];
+
+		const noteActions = [
+			<RaisedButton
+        label="Cancel"
+        primary={true}
+        onClick={this.handleClose}
+      />,
+			<RaisedButton
+				label="Reset"
+				onClick={this.resetNoteForm}
+				style={style}
+			/>,
+			<RaisedButton
+	      label="Save Note"
+	      onClick={this.submitNote}
 	      style={style} />,
 		];
 
@@ -122,6 +230,39 @@ class Plans extends Component {
 		return (
 			<div>
 				<Dialog
+					id="add_note_dialog"
+					title="Add new note"
+					actions={noteActions}
+					open={this.state.noteOpen}
+				>
+					<form onSubmit={this.submitNote}>
+						<TextField
+							id="text-field"
+							value={this.state.text}
+							placeholder="Enter report title here..."
+							onChange={(e) => this.setState({text: e.target.value})}
+							required
+							style={style}
+						/>
+						<TextField
+							id="text-field-description"
+							value={this.state.description}
+							placeholder="Enter report description here..."
+							onChange={(e) => this.setState({description: e.target.value})}
+							style={style}
+						/>
+						<TimePicker
+							id="time-field"
+							format="24hr"
+							placeholder="Spent time"
+							value={this.state.spent_time}
+							onChange={this.handleTimePicker}
+							style={style}
+						/>
+					</form>
+				</Dialog>
+				<Dialog
+					id="add_plan_dialog"
 					title="Add new plan"
 					actions={planActions}
 					modal={true}
@@ -163,7 +304,8 @@ class Plans extends Component {
 							    <MenuItem onClick={() => this.props.deletePlan(id)}>Delete</MenuItem>
 							  </IconMenu>
 							}
-							nestedItems={[]}
+							onClick={(elem) => this.getNotesForPlan()}
+							nestedItems={this.getNotesForPlan(plan.id)}
 						/>
 					))}
 				</List>
@@ -175,6 +317,7 @@ class Plans extends Component {
 const mapStateToProps = state => {
 	return {
 		plans: state.plans,
+		notes: state.notes,
 		user: state.auth.user,
 	}
 };
@@ -184,14 +327,27 @@ const mapDispatchToProps = dispatch => {
 		fetchPlans: () => {
 			dispatch(plans.fetchPlans());
 		},
+		fetchNotes: () => {
+			dispatch(notes.fetchNotes());
+		},
 		addPlan: (date_for) => {
 			return dispatch(plans.addPlan(date_for));
+		},
+		addNote: (planId, title, description, spent_time) => {
+			return dispatch(notes.addNote(planId, title, description, spent_time));
 		},
 		updatePlan: (id, date_for) => {
 			return dispatch(plans.updatePlan(id, date_for));
 		},
+		updateNote: (id, planId, title, description, spent_time) => {
+			return dispatch(notes.updateNote(
+				id, planId, title, description, spent_time));
+		},
 		deletePlan: (id) => {
 			dispatch(plans.deletePlan(id));
+		},
+		deleteNote: (id) => {
+			dispatch(notes.deleteNote(id));
 		},
 		logout: () => dispatch(auth.logout()),
 	}

@@ -37,11 +37,10 @@ class NoteViewSet(viewsets.ModelViewSet):
     serializer_class = NoteSerializer
 
     def get_queryset(self):
-        plan_id = int(self.request.GET.get('plan_id', None))
-        return self.request.user.note_set.filter(plan_id=plan_id).all()
+        return self.request.user.note_set.all()
 
     def perform_create(self, serializer):
-        plan_id = int(self.request.GET.get('plan_id', None))
+        plan_id = int(self.request.POST.get('plan_id', None))
         plan = Plan.objects.get(id=plan_id)
         serializer.save(plan=plan, owner=self.request.user)
 
