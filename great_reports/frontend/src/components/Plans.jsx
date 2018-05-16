@@ -24,6 +24,20 @@ import {plans, notes, auth} from '../actions';
 const style = {
   margin: 12,
 };
+const fullBlockStyle = {
+	width: '50%',
+	paddingLeft: 10,
+	paddingRight: 10,
+};
+const lastControlItem = {
+	borderBottom: '1px solid darkgrey',
+	textAlign: 'center',
+	backgroundColor: 'rgb(0, 188, 212)',
+	color: 'white',
+};
+const hiddenItem = {
+	display: 'none',
+};
 
 
 class Plans extends Component {
@@ -84,6 +98,14 @@ class Plans extends Component {
 				)
 			}
 		});
+		notesListForPlan.push(
+			<ListItem
+				key={'note_add_new'}
+				primaryText={"Add new note"}
+				style={lastControlItem}
+				onClick={() => this.handleNoteOpen()}
+			/>
+		);
 		return notesListForPlan;
 	};
 
@@ -202,10 +224,10 @@ class Plans extends Component {
 
 		const noteActions = [
 			<RaisedButton
-        label="Cancel"
-        primary={true}
-        onClick={this.handleClose}
-      />,
+				label="Cancel"
+				primary={true}
+				onClick={this.handleNoteClose}
+			  />,
 			<RaisedButton
 				label="Reset"
 				onClick={this.resetNoteForm}
@@ -228,7 +250,7 @@ class Plans extends Component {
 		);
 
 		return (
-			<div>
+			<div style={fullBlockStyle}>
 				<Dialog
 					id="add_note_dialog"
 					title="Add new note"
@@ -237,10 +259,10 @@ class Plans extends Component {
 				>
 					<form onSubmit={this.submitNote}>
 						<TextField
-							id="text-field"
-							value={this.state.text}
+							id="title-field"
+							value={this.state.title}
 							placeholder="Enter report title here..."
-							onChange={(e) => this.setState({text: e.target.value})}
+							onChange={(e) => this.setState({title: e.target.value})}
 							required
 							style={style}
 						/>
