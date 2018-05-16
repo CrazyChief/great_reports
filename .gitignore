@@ -12,6 +12,7 @@ __pycache__/
 .media/
 local_settings.py
 *.sqlite3
+.DS_Store
 
 # node modules
 node_modules/
