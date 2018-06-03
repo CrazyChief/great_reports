@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import {
+	AppBar,
+	FlatButton,
 	Tabs,
 	Tab,
 } from 'material-ui';
@@ -14,12 +16,14 @@ class GreatReports extends Component {
 	render() {
 		return (
 			<div>
-				<h2>Welcome to Great Reports!</h2>
-				<hr/>
-				<div style={{textAlign: "right"}}>
-          {this.props.user.username} (<a onClick={this.props.logout}>logout</a>)
-        </div>
-
+				<AppBar
+					title='Welcome to Great Reports!'
+					iconElementRight={
+						<FlatButton
+							label='Logout' onClick={this.props.logout}
+						/>
+					}
+				/>
 				<Tabs>
 					<Tab label="Plans">
 						<Plans></Plans>
