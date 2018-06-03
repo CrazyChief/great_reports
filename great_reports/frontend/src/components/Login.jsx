@@ -51,6 +51,13 @@ class Login extends Component {
 			<div>
 				<AppBar title="Login" />
 				<div className="formWrapper" style={formWrapper}>
+					{this.props.errors.length > 0 && (
+						<ul>
+						  {this.props.errors.map(error => (
+							<li key={error.field}>{error.message}</li>
+						  ))}
+						</ul>
+					  )}
 					<TextField
 						hintText="Enter your Username"
 						floatingLabelText="Username"
