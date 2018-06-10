@@ -61,7 +61,10 @@ class Reports extends Component {
 	};
 
 	convertDateToString = (date) => {
-		return `${date.getHours()}:${date.getMinutes()}`
+		if (date !== null) {
+			return `${date.getHours()}:${date.getMinutes()}`;
+		}
+		return "";
 	};
 
 	convertStringToDate = (string) => {
